@@ -8,11 +8,8 @@
 /// Note: You can copy code from day_11/sources/solution.move if needed
 
 module challenge::day_12 {
-    use std::vector;
     use std::string::String;
-    use std::option::{Self, Option};
 
-    // Copy from day_11: TaskStatus, Task, and TaskBoard
     public enum TaskStatus has copy, drop {
         Open,
         Completed,
@@ -48,15 +45,22 @@ module challenge::day_12 {
         vector::push_back(&mut board.tasks, task);
     }
 
-    // TODO: Write a function 'find_task_by_title' that:
-    // - Takes board: &TaskBoard and title: &String
-    // - Returns Option<u64> (the index if found, None if not found)
-    // - Loops through tasks and compares titles
-    // public fun find_task_by_title(board: &TaskBoard, title: &String): Option<u64> {
-    //     // Your code here
-    //     // Use a while loop to iterate
-    //     // Use option::some(index) if found
-    //     // Use option::none() if not found
-    // }
-}
+    /// Finds a task by title and returns its index if found
+    public fun find_task_by_title(
+        board: &TaskBoard,
+        title: &String
+    ): Option<u64> {
+        let mut i = 0;
+        let len = vector::length(&board.tasks);
 
+        while (i < len) {
+            let task = vector::borrow(&board.tasks, i);
+            if (&task.title == title) {
+                return option::some(i)
+            };
+            i = i + 1;
+        };
+
+        option::none()
+    }
+}
