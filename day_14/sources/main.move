@@ -82,27 +82,43 @@ module challenge::day_14 {
         count
     }
 
-    // Note: assert! is a built-in macro in Move 2024 - no import needed!
+    #[test]
+    fun test_create_board_and_add_task() {
+        let owner = @0x1;
+        let mut board = new_board(owner);
+        let task = new_task(string::utf8(b"Test Task"), 100);
+        add_task(&mut board, task);
+        assert_eq!(vector::length(&board.tasks), 1);
+        let added_task = vector::borrow(&board.tasks, 0);
+        assert_eq!(added_task.title, string::utf8(b"Test Task"));
+        assert_eq!(added_task.reward, 100);
+        assert_eq!(added_task.status, TaskStatus::Open);
+    }
 
-    // TODO: Write at least 3 tests:
-    // 
-    // Test 1: test_create_board_and_add_task
-    // - Create a board with an owner
-    // - Add a task
-    // - Verify the task was added
-    // 
-    // Test 2: test_complete_task
-    // - Create board, add tasks
-    // - Complete a task
-    // - Verify completed_count is correct
-    // 
-    // Test 3: test_total_reward
-    // - Create board, add multiple tasks with different rewards
-    // - Verify total_reward is correct
-    // 
-    // #[test]
-    // fun test_create_board_and_add_task() {
-    //     // Your code here
-    // }
+    #[test]
+    fun test_complete_task() {
+        let owner = @0x1;
+        let mut board = new_board(owner);
+        let task1 = new_task(string::utf8(b"Task 1"), 50);
+        let task2 = new_task(string::utf8(b"Task 2"), 75);
+        add_task(&mut board, task1);
+        add_task(&mut board, task2);
+        let task_ref = vector::borrow_mut(&mut board.tasks, 1);
+        complete_task(task_ref);
+        assert_eq!(completed_count(&board), 1);
+    }
+
+    #[test]
+    fun test_total_reward() {
+        let owner = @0x1;
+        let mut board = new_board(owner);
+        let task1 = new_task(string::utf8(b"Task 1"), 10);
+        let task2 = new_task(string::utf8(b"Task 2"), 20);
+        let task3 = new_task(string::utf8(b"Task 3"), 30);
+        add_task(&mut board, task1);
+        add_task(&mut board, task2);
+        add_task(&mut board, task3);
+        assert_eq!(total_reward(&board), 60);
+    }
 }
 
