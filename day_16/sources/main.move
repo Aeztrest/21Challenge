@@ -9,6 +9,9 @@
 /// day_15/sources/solution.move if needed (note: plotId functionality has been added)
 
 module challenge::day_16 {
+    use std::vector;
+    use sui::object::{Self, UID};
+    use sui::tx_context::TxContext;
 
 
     // Copy from day_15: FarmCounters struct
@@ -78,18 +81,20 @@ module challenge::day_16 {
     // - id: UID (this makes it a Sui object)
     // - counters: FarmCounters
     // Add 'key' ability (required for Sui objects)
-    // public struct Farm has key {
-    //     id: UID,
-    //     counters: FarmCounters,
-    // }
+    public struct Farm has key {
+        id: UID,
+        counters: FarmCounters,
+    }
 
     // TODO: Write a constructor 'new_farm' that:
     // - Takes ctx: &mut TxContext
     // - Creates a UID using object::new(ctx)
     // - Returns a Farm with the UID and default counters
-    // fun new_farm(ctx: &mut TxContext): Farm {
-    //     // Your code here
-    //     // Hint: let id = object::new(ctx);
-    // }
+    fun new_farm(ctx: &mut TxContext): Farm {
+        Farm {
+            id: object::new(ctx),
+            counters: new_counters(),
+        }
+    }
 }
 
