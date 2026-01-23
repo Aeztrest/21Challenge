@@ -10,7 +10,9 @@
 
 
 module challenge::day_19 {
-   
+    use sui::transfer;
+    use sui::tx_context::{sender, TxContext};
+    use sui::object::{Self, UID};
 
     const MAX_PLOTS: u64 = 20;
     const E_PLOT_NOT_FOUND: u64 = 1;
@@ -107,23 +109,14 @@ module challenge::day_19 {
         harvest_from_farm(farm, plotId);
     }
 
-    // TODO: Write a function 'total_planted' that:
-    // - Takes farm: &Farm (read-only reference)
-    // - Returns u64 (the planted count)
-    // public fun total_planted(farm: &Farm): u64 {
-    //     // Your code here
-    // }
+    // Get total planted count
+    public fun total_planted(farm: &Farm): u64 {
+        farm.counters.planted
+    }
 
-    // TODO: Write a function 'total_harvested' that:
-    // - Takes farm: &Farm
-    // - Returns u64 (the harvested count)
-    // public fun total_harvested(farm: &Farm): u64 {
-    //     // Your code here
-    // }
-
-    // TODO: (Optional) Write a test that:
-    // - Creates a farm
-    // - Plants once
-    // - Checks that total_planted returns 1
+    // Get total harvested count
+    public fun total_harvested(farm: &Farm): u64 {
+        farm.counters.harvested
+    }
 }
 
